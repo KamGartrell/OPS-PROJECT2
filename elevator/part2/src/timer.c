@@ -7,11 +7,11 @@
 
 // Define the license, author, description, and version of the kernel module
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("GROUP 3");
+MODULE_AUTHOR("GROUP 6");
 MODULE_DESCRIPTION("COP4610 Project 2 Part 2: Timer Kernel Module");
 MODULE_VERSION("1.0");
 
-// Define constants for the proc file name, buffer length, and nanoseconds per second
+// Constants for proc file name, buffer length, and nanoseconds per second
 #define PROC_NAME "timer"
 #define BUFFER_LEN 256
 #define NANOSEC_PER_SEC_VAL 1000000000L
@@ -24,7 +24,7 @@ static bool hasPriorCall = false;
 // Function to read the current time and elapsed time from the proc file
 static ssize_t timer_read(struct file *file, char __user *ubuf, size_t count, loff_t *ppos) {
 	// Declare local variables for the current time, buffer, and length
-    struct timespec64 currentTime;
+	struct timespec64 currentTime;
 	char buf[BUFFER_LEN];
 	int len = 0;
 
@@ -32,17 +32,16 @@ static ssize_t timer_read(struct file *file, char __user *ubuf, size_t count, lo
 	if (*ppos > 0)
 		return 0;
 
-    // Get the current time using ktime_get_real_ts64
+	// Get the current time using ktime_get_real_ts64
 	ktime_get_real_ts64(&currentTime);
 
-    // If this is the first call, just print the current time OR calculate and print the elapsed time
+	// First call prints current time; later calls also print elapsed time
 	if (!hasPriorCall) {
-        // Format the current time into the buffer
-		len = snprintf(buf, sizeof(buf), "Current time: %lld.%09lld\n", (long long)currentTime.tv_sec, currentTime.tv_nsec);
+		len = snprintf(buf, sizeof(buf), "current time: %lld.%09ld\n",(long long)currentTime.tv_sec,currentTime.tv_nsec); 
 		hasPriorCall = true;
 	} else {
 		long long diffSec = currentTime.tv_sec - lastTime.tv_sec;
-		long long diffNSec = currentTime.tv_nsec - lastTime.tv_nsec;
+		long diffNSec = currentTime.tv_nsec - lastTime.tv_nsec;
 
 		// Borrow 1 second if nanoseconds wrapped around
 		if (diffNSec < 0) {
@@ -50,13 +49,13 @@ static ssize_t timer_read(struct file *file, char __user *ubuf, size_t count, lo
 			diffNSec += NANOSEC_PER_SEC_VAL;
 		}
 
-		len = snprintf(buf, sizeof(buf), "Current time: %lld.%09lld\n" "Elapsed time: %lld.%09lld\n", (long long)currentTime.tv_sec, currentTime.tv_nsec, diffSec, diffNSec);
+		len = snprintf(buf, sizeof(buf), "current time: %lld.%09ld\n" "elapsed time: %lld.%09ld\n", (long long)currentTime.tv_sec, currentTime.tv_nsec, diffSec, diffNSec);
 	}
 
 	// Save current time for the next read
 	lastTime = currentTime;
 
-    // Copy the formatted buffer to user space and return the number of bytes read
+	// Copy formatted buffer to user space and return bytes read
 	return simple_read_from_buffer(ubuf, count, ppos, buf, len);
 }
 
@@ -67,7 +66,7 @@ static const struct proc_ops timer_proc_ops = {
 
 // Module initialization function to create the proc entry
 static int __init timer_init(void) {
-    // Create the proc entry with read permissions and associate it with the timer_proc_ops
+	// Create proc entry with read permissions and link timer_proc_ops
 	timerProcEntry = proc_create(PROC_NAME, 0444, NULL, &timer_proc_ops);
 	if (!timerProcEntry)
 		return -ENOMEM; // Return error if proc entry creation fails
