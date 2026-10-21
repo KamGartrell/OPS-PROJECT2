@@ -51,8 +51,9 @@ elevator/
 │   ├── part1.trace
 │   └── Makefile
 ├── part2/
-│   ├── src/
-│   └── Makefile
+│   ├── Makefile
+│   └── src/
+│       └── timer.c
 ├── part3/
 │   ├── src/
 │   ├── tests/
@@ -118,7 +119,7 @@ Each member records their contributions here.
 
 | Date       | Work Completed / Notes |
 |------------|------------------------|
-| 2026-10-18 |   Part 1 and Part 2    |
+| 2026-10-21 | Completed Part 1 and 2 |
 | YYYY-MM-DD | [Description of task]  |
 | YYYY-MM-DD | [Description of task]  |
 
