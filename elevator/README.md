@@ -1,6 +1,6 @@
 # Elevator
 
-[Description]
+A Linux kernel modification and module project that implements system call tracing, a kernel timer module using /proc/timer, and a multi-threaded pet elevator scheduling kernel module controlled via custom system calls and /proc/elevator.
 
 ## Group Members
 - **Kameryn Gartrell**: ksg22b@fsu.edu
@@ -9,11 +9,11 @@
 ## Division of Labor
 
 ### Part 1: System Call Tracing
-- **Responsibilities**: [Description]
+- **Responsibilities**: Added five system calls to a C program and verifying the trace count using strace
 - **Assigned to**: Kameryn Gartrell
 
 ### Part 2: Timer Kernel Module
-- **Responsibilities**: [Description]
+- **Responsibilities**: Created the my_timer kernel module to track current and elapsed time in /proc/timer
 - **Assigned to**: Kameryn Gartrell
 
 ### Part 3a: Adding System Calls
@@ -66,51 +66,49 @@ elevator/
 # How to Compile & Execute
 
 ### Requirements
-- **Compiler**: e.g., `gcc` for C/C++, `rustc` for Rust.
-- **Dependencies**: List any libraries or frameworks necessary (rust only).
+- **Compiler**: gcc for C/C++
+- **Dependencies**: unistd.h, linux/init.h, linux/module.h, linux/proc_fs.h, linux/timekeeping.h
 
 ## Part 1
 
 ### Compilation
-For a C/C++ example:
 ```bash
 make
 ```
-This will build the executable in ...
+This will build the executables part1/empty and part1/part1.
 ### Execution
 ```bash
-make run
+make trace
 ```
-This will run the program ...
+This will run strace on both executables and output empty.trace and part1.trace.
 
 ## Part 2
 
 ### Compilation
-For a C/C++ example:
 ```bash
 make
 ```
-This will build the executable in ...
+This will build the kernel module in part2/my_timer.ko.
 ### Execution
 ```bash
-make run
+sudo insmod my_timer.ko
+cat /proc/timer
+sudo rmmod my_timer
 ```
-This will run the program ...
-
+This will load the module, read the current and elapsed time from /proc/timer, and unload the module.
 
 ## Part 3
 
 ### Compilation
-For a C/C++ example:
 ```bash
 make
 ```
-This will build the executable in ...
+This will build the kernel module in part3/elevator.ko.
 ### Execution
 ```bash
-make run
+sudo insmod elevator.ko
 ```
-This will run the program ...
+This will load the elevator kernel module.
 
 ## Development Log
 Each member records their contributions here.
@@ -158,3 +156,5 @@ Document in-person meetings, their purpose, and what was discussed.
 - **Bug 3**: This is bug 3.
 
 ## Considerations
+- Github Copilot helped with syntax formatting and documentation
+- Google Gemnii helped with documentation and help with archiecture/concepts of project
