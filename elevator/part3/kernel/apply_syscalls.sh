@@ -69,15 +69,24 @@ PROTO
 fi
 
 # 4. top-level Makefile: build syscalls/ into the kernel (core-y)
-if grep -qE '^core-y.*[[:space:]]syscalls/' "$TOP"; then
+if grep -qE '^core-y.*syscalls/' "$TOP"; then
 	echo "[skip] top-level Makefile already builds syscalls/"
 else
-	if ! grep -qE '^core-y[[:space:]]*\+=[[:space:]]*kernel/' "$TOP"; then
-		echo "Could not find the 'core-y += kernel/ ...' line in $TOP." >&2
-		echo "Add 'syscalls/' to the core-y list by hand." >&2
-		exit 1
+	if grep -qE '^core-y[[:space:]]*\+=[[:space:]]*kernel/' "$TOP"; then
+		# older layout: core-y += kernel/ certs/ mm/ ...
+		sed -i -E '/^core-y[[:space:]]*\+=[[:space:]]*kernel\//s|$| syscalls/|' "$TOP"
+	else
+		# newer layout: add our own "core-y += syscalls/" line right after the
+		# first core-y assignment (same ifeq block, so it is always in scope)
+		LN="$(grep -nE '^core-y[[:space:]]*(:=|\+=)' "$TOP" | head -n 1 | cut -d: -f1 || true)"
+		if [ -z "$LN" ] || sed -n "${LN}p" "$TOP" | grep -q '\\$'; then
+			echo "Could not safely edit the core-y line in $TOP." >&2
+			echo "Find it with: grep -n core-y $TOP" >&2
+			echo "and add a new line 'core-y += syscalls/' below it by hand." >&2
+			exit 1
+		fi
+		sed -i "${LN}a core-y += syscalls/" "$TOP"
 	fi
-	sed -i -E '/^core-y[[:space:]]*\+=[[:space:]]*kernel\//s|$| syscalls/|' "$TOP"
 	echo "[ok] added syscalls/ to core-y in top-level Makefile"
 fi
 

@@ -34,7 +34,7 @@ fi
 if command -v apt-get >/dev/null; then
 	sudo apt-get update
 	sudo apt-get install -y build-essential libncurses-dev bison flex \
-		libssl-dev libelf-dev bc dwarves zstd cpio rsync git
+		libssl-dev libelf-dev libdw-dev bc dwarves zstd cpio rsync git
 fi
 
 # Start from the running kernel's config
