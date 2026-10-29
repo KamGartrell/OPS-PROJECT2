@@ -7,7 +7,7 @@ controlled via custom system calls and /proc/elevator.
 ## Group Members
 - **Kameryn Gartrell**: ksg22b@fsu.edu
 - **Matthew Chen**: mc23c@fsu.edu
-- **Tyler Dussault**: [email]@fsu.edu
+- **Tyler Dussault**: tjd22@fsu.edu
 
 ## Division of Labor
 
