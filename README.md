@@ -220,4 +220,4 @@ Document in-person meetings, their purpose, and what was discussed.
 - Github Copilot helped with syntax formatting and documentation
 - Google Gemini helped with documentation and help with architecture/concepts of project
 - Claude (Anthropic) helped write the Part 3a/3b system call source, kernel patch script, kernel
-  build script and the related README sections
+  build script, elevator.c, and the related README sections
