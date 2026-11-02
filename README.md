@@ -57,23 +57,23 @@ controlled via custom system calls and /proc/elevator.
 
 ## File Listing
 ```
-elevator/
+Makefile
+README.md
+part1/
+    ├── Makefile
+    ├── empty.c
+    ├── empty.trace
+    ├── part1.c
+    └── part1.trace
+part2/
 ├── Makefile
-├── README.md
-├── part1/
-│   ├── Makefile
-│   ├── empty.c
-│   ├── empty.trace
-│   ├── part1.c
-│   └── part1.trace
-├── part2/
-│   ├── Makefile
-│   └── src/
-│       └── timer.c
-└── part3/
+└── src/
+    └── timer.c
+part3/
     ├── Makefile
     ├── syscalls.c                  (kernel source, copied into <kernel>/syscalls/)
-    ├── src/                        (elevator module sources, in progress)
+    ├── src/
+    |   └── elevator.c              (elevator module sources)
     ├── kernel/
     │   ├── apply_syscalls.sh       (patches a kernel tree with the syscalls)
     │   ├── build_kernel.sh         (configures, builds and installs the kernel)
@@ -187,7 +187,7 @@ Each member records their contributions here.
 | Date       | Work Completed / Notes |
 |------------|------------------------|
 | 2026-10-21 | Completed Part 1 and 2 |
-| YYYY-MM-DD | [Description of task]  |
+| 2026-11-01 | Assisted in writing elevator.c |
 
 ### Matthew Chen
 
@@ -195,31 +195,26 @@ Each member records their contributions here.
 |------------|------------------------|
 | 2026-10-24 | Wrote `syscalls.c` (548/549/550 with exported `STUB_*` hooks) and `apply_syscalls.sh` |
 | 2026-10-24 | Wrote `build_kernel.sh` (config, build, install) and documented the kernel build in the README |
-| YYYY-MM-DD | [Build and boot the kernel, run `test-syscalls`] |
+| 2026-10-24 | [Build and boot the kernel, run `test-syscalls`] |
 
 ### Tyler Dussault
 
 | Date       | Work Completed / Notes |
 |------------|------------------------|
-| YYYY-MM-DD | [Description of task]  |
-| YYYY-MM-DD | [Description of task]  |
+| 2026-11-01 | Wrote elevator.c and tested part 3  |
 
 ## Meetings
 Document in-person meetings, their purpose, and what was discussed.
 
 | Date       | Attendees            | Topics Discussed | Outcomes / Decisions |
 |------------|----------------------|------------------|-----------------------|
-| YYYY-MM-DD | [Names]              | [Agenda items]   | [Actions/Next steps]  |
-| YYYY-MM-DD | [Names]              | [Agenda items]   | [Actions/Next steps]  |
+| 2026-10-14 | Whole Group          | Set up division of labor   | Kameryn will start the project, Matthew will set up the kernel, Tyler will                                                                    write the elevator implementation  |
+| 2026-11-2  | Whole Group          | Ensure project is complete | General bug testing  |
 
 ## Bugs
-- **Elevator module not finished**: `part3/src/` and `part3/Makefile` are not written yet, so
-  `make` in `part3/` does not produce `elevator.ko` and the top-level `make` fails until they are.
 - **Module unload race**: the syscalls call through the `STUB_*` pointers without any lock, so
   unloading `elevator.ko` while a syscall is running could crash the kernel. Not an issue for the
   normal start, run, stop, rmmod sequence.
-- **Kernel build not yet verified**: the patch script was tested on a mock kernel tree only; the
-  real 6.16.x build is still to be confirmed (see development log).
 
 ## Considerations
 - Github Copilot helped with syntax formatting and documentation
